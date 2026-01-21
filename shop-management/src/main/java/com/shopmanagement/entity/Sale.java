@@ -39,6 +39,9 @@ public class Sale {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleItem> items = new ArrayList<>();
 

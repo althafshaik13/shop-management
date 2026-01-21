@@ -19,6 +19,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/batteries/**").permitAll()
                         .requestMatchers("/api/spare-parts/**").permitAll()
                         .requestMatchers("/api/sales/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

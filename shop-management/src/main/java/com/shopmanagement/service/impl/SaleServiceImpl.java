@@ -60,6 +60,7 @@ public class SaleServiceImpl implements SaleService {
         }
 
         sale.setPaymentType(saleRequest.getPaymentType());
+        sale.setPaymentStatus(saleRequest.getPaymentStatus());
         sale.setCustomerName(saleRequest.getCustomerName());
         sale.setCustomerPhone(saleRequest.getCustomerPhone());
         sale.setCustomerAddress(saleRequest.getCustomerAddress());

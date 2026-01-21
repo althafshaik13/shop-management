@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: shop-management
+
+  datasource:
+    url: jdbc:postgresql://localhost:3117/shop_db
+    username: admin
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+app:
+  file:
+    storage-dir: E:/shop-management-images
+
+  security:
+    allowed-phones:
+      - "9490022396"
+      - "9030600667"
+      - "9985090032"
+      - "8247415115"
+      - "9030703188"

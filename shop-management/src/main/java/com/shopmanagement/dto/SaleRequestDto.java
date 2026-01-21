@@ -1,5 +1,6 @@
 package com.shopmanagement.dto;
 
+import com.shopmanagement.entity.PaymentStatus;
 import com.shopmanagement.entity.PaymentType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,6 +16,9 @@ public class SaleRequestDto {
 
     @NotNull(message = "Payment Type is required")
     private PaymentType paymentType;
+
+    @NotNull(message = "Payment Status is required")
+    private PaymentStatus paymentStatus;
 
     private String customerName;
 
