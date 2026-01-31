@@ -109,9 +109,8 @@ class _SparePartFormScreenState extends State<SparePartFormScreen> {
       final sparePart = SparePartModel(
         id: widget.sparePart?.id,
         name: _nameController.text,
-        category: _categoryController.text.isEmpty
-            ? null
-            : _categoryController.text,
+        category:
+            _categoryController.text.isEmpty ? null : _categoryController.text,
         dealerPrice: double.parse(_dealerPriceController.text),
         customerPrice: double.parse(_customerPriceController.text),
         quantity: int.parse(_quantityController.text),
@@ -160,118 +159,154 @@ class _SparePartFormScreenState extends State<SparePartFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Spare Part' : 'Add Spare Part'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0A0A0A),
+                Color(0xFF1C1C1C),
+                Color(0xFF330000),
+                Color(0xFF5C0000),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Image Section
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                      image: _imageUrl != null
-                          ? DecorationImage(
-                              image: NetworkImage(_imageUrl!),
-                              fit: BoxFit.cover,
-                            )
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A0A0A),
+              Color(0xFF1C1C1C),
+              Color(0xFF330000),
+              Color(0xFF5C0000),
+            ],
+          ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Image Section
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        image: _imageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(_imageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                      child: _imageUrl == null
+                          ? const Icon(Icons.build,
+                              size: 64, color: Colors.white70)
                           : null,
                     ),
-                    child: _imageUrl == null
-                        ? const Icon(Icons.build, size: 64)
-                        : null,
-                  ),
-                  const SizedBox(height: 8),
-                  Consumer<SparePartProvider>(
-                    builder: (context, provider, child) {
-                      return TextButton.icon(
-                        onPressed: provider.isUploading ? null : _pickImage,
-                        icon: provider.isUploading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.camera_alt),
-                        label: Text(
-                          provider.isUploading
-                              ? 'Uploading...'
-                              : 'Change Image',
-                        ),
-                      );
-                    },
-                  ),
+                    const SizedBox(height: 8),
+                    Consumer<SparePartProvider>(
+                      builder: (context, provider, child) {
+                        return TextButton.icon(
+                          onPressed: provider.isUploading ? null : _pickImage,
+                          icon: provider.isUploading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.camera_alt),
+                          label: Text(
+                            provider.isUploading
+                                ? 'Uploading...'
+                                : _imageUrl == null
+                                    ? 'Add Image'
+                                    : 'Change Image',
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              CustomTextField(
+                label: 'Name',
+                controller: _nameController,
+                validator: (value) =>
+                    Validators.validateRequired(value, 'Name'),
+                prefixIcon: const Icon(Icons.title),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Category (Optional)',
+                controller: _categoryController,
+                prefixIcon: const Icon(Icons.category),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Dealer Price',
+                controller: _dealerPriceController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: Validators.validatePrice,
+                prefixIcon: const Icon(Icons.shopping_cart),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
               ),
-            ),
-            const SizedBox(height: 24),
-            CustomTextField(
-              label: 'Name',
-              controller: _nameController,
-              validator: (value) => Validators.validateRequired(value, 'Name'),
-              prefixIcon: const Icon(Icons.title),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Category (Optional)',
-              controller: _categoryController,
-              prefixIcon: const Icon(Icons.category),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Dealer Price',
-              controller: _dealerPriceController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Customer Price',
+                controller: _customerPriceController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: Validators.validatePrice,
+                prefixIcon: const Icon(Icons.sell),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                ],
               ),
-              validator: Validators.validatePrice,
-              prefixIcon: const Icon(Icons.shopping_cart),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Customer Price',
-              controller: _customerPriceController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Quantity',
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                validator: Validators.validateQuantity,
+                prefixIcon: const Icon(Icons.inventory),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
-              validator: Validators.validatePrice,
-              prefixIcon: const Icon(Icons.sell),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Quantity',
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              validator: Validators.validateQuantity,
-              prefixIcon: const Icon(Icons.inventory),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-            const SizedBox(height: 32),
-            Consumer<SparePartProvider>(
-              builder: (context, provider, child) {
-                return CustomButton(
-                  text: isEditing ? 'Update Spare Part' : 'Add Spare Part',
-                  onPressed: _saveSparePart,
-                  isLoading: provider.isLoading,
-                  icon: isEditing ? Icons.save : Icons.add,
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 32),
+              Consumer<SparePartProvider>(
+                builder: (context, provider, child) {
+                  return CustomButton(
+                    text: isEditing ? 'Update Spare Part' : 'Add Spare Part',
+                    onPressed: _saveSparePart,
+                    isLoading: provider.isLoading,
+                    icon: isEditing ? Icons.save : Icons.add,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

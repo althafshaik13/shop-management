@@ -35,6 +35,6 @@ public class SaleController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) ProductType productType,
             @RequestParam(required = false) PaymentStatus paymentStatus) {
-        return ResponseEntity.ok(service.getSalesByDateRange(startDate, endDate, productType));
+        return ResponseEntity.ok(service.getSalesByDateRange(startDate, endDate, productType, paymentStatus));
     }
 }

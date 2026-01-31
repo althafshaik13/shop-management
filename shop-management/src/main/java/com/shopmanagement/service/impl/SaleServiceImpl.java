@@ -95,13 +95,15 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public List<SaleResponseDto> getSalesByDateRange(LocalDate startDate, LocalDate endDate, ProductType productType) {
+    public List<SaleResponseDto> getSalesByDateRange(LocalDate startDate, LocalDate endDate, ProductType productType, PaymentStatus paymentStatus) {
         LocalDateTime start = startDate!= null ? startDate.atTime(LocalTime.MIN): null;
         LocalDateTime end = endDate!= null ? endDate.atTime(LocalTime.MAX): null;
 
         List<Sale> sales;
         if (productType != null) {
             sales = saleRepository.findBySaleDateBetweenAndProductTypeOrderBySaleDateDesc(start, end, productType);
+        } else if(paymentStatus != null) {
+            sales = saleRepository.findBySaleDateBetweenAndPaymentStatusOrderBySaleDateDesc(start, end, paymentStatus);
         } else if(startDate!= null && endDate != null) {
             sales = saleRepository.findBySaleDateBetweenOrderBySaleDateDesc(start, end);
         } else {

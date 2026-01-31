@@ -49,6 +49,7 @@ class _SaleScreenState extends State<SaleScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => _AddSaleItemSheet(
         onItemAdded: (item) {
           context.read<SaleProvider>().addSaleItem(item);
@@ -113,6 +114,20 @@ class _SaleScreenState extends State<SaleScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Sale'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0A0A0A),
+                Color(0xFF1C1C1C),
+                Color(0xFF330000),
+                Color(0xFF5C0000),
+              ],
+            ),
+          ),
+        ),
         actions: [
           Consumer<SaleProvider>(
             builder: (context, provider, child) {
@@ -135,273 +150,401 @@ class _SaleScreenState extends State<SaleScreen> {
           ),
         ],
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  // Sale Items Section
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Sale Items',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              ElevatedButton.icon(
-                                onPressed: _addItem,
-                                icon: const Icon(Icons.add),
-                                label: const Text('Add Item'),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Consumer<SaleProvider>(
-                            builder: (context, provider, child) {
-                              if (provider.currentSaleItems.isEmpty) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(32.0),
-                                    child: Text('No items added yet'),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A0A0A),
+              Color(0xFF1C1C1C),
+              Color(0xFF330000),
+              Color(0xFF5C0000),
+            ],
+          ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    // Sale Items Section
+                    Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Sale Items',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: _addItem,
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Add Item'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.1),
+                                    foregroundColor: Colors.white,
+                                    side: BorderSide(
+                                      color: Colors.white.withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                    elevation: 0,
                                   ),
-                                );
-                              }
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Consumer<SaleProvider>(
+                              builder: (context, provider, child) {
+                                if (provider.currentSaleItems.isEmpty) {
+                                  return Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(32.0),
+                                      child: Text(
+                                        'No items added yet',
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                    ),
+                                  );
+                                }
 
-                              return Column(
-                                children: [
-                                  ...provider.currentSaleItems
-                                      .asMap()
-                                      .entries
-                                      .map((
-                                    entry,
-                                  ) {
-                                    final index = entry.key;
-                                    final item = entry.value;
-                                    return Card(
-                                      margin: const EdgeInsets.only(bottom: 8),
-                                      child: ListTile(
-                                        title: Text(
-                                          '${item.productType.displayName} #${item.productId}',
+                                return Column(
+                                  children: [
+                                    ...provider.currentSaleItems
+                                        .asMap()
+                                        .entries
+                                        .map((
+                                      entry,
+                                    ) {
+                                      final index = entry.key;
+                                      final item = entry.value;
+                                      return Card(
+                                        color: Colors.white.withOpacity(0.05),
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                            color:
+                                                Colors.white.withOpacity(0.2),
+                                            width: 1,
+                                          ),
                                         ),
-                                        subtitle: Text(
-                                          'Qty: ${item.quantity} × ${currencyFormat.format(item.customerPrice)}',
-                                        ),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              currencyFormat.format(
-                                                item.totalAmount,
+                                        margin:
+                                            const EdgeInsets.only(bottom: 8),
+                                        child: ListTile(
+                                          title: Text(
+                                            '${item.productType.displayName} #${item.productId}',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                          subtitle: Text(
+                                            'Qty: ${item.quantity} × ${currencyFormat.format(item.customerPrice)}',
+                                            style: TextStyle(
+                                                color: Colors.white70),
+                                          ),
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                currencyFormat.format(
+                                                  item.totalAmount,
+                                                ),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                              style: const TextStyle(
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                                onPressed: () {
+                                                  provider
+                                                      .removeSaleItem(index);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    const Divider(height: 32),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total:',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge
+                                              ?.copyWith(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 16,
+                                                color: Colors.white,
                                               ),
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
+                                        ),
+                                        Text(
+                                          currencyFormat.format(
+                                            provider.currentSaleTotal,
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.greenAccent,
                                               ),
-                                              onPressed: () {
-                                                provider.removeSaleItem(index);
-                                              },
-                                            ),
-                                          ],
                                         ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  const Divider(height: 32),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Total:',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        currencyFormat.format(
-                                          provider.currentSaleTotal,
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Profit:',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge?.copyWith(
+                                                color: Colors.white,
+                                              ),
                                         ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Profit:',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge,
-                                      ),
-                                      Text(
-                                        currencyFormat.format(
-                                          provider.currentSaleProfit,
+                                        Text(
+                                          currencyFormat.format(
+                                            provider.currentSaleProfit,
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.blueAccent,
+                                              ),
                                         ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.blue,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Customer Details
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Customer Details (Optional)',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextField(
-                            label: 'Customer Name',
-                            controller: _customerNameController,
-                            prefixIcon: const Icon(Icons.person),
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextField(
-                            label: 'Customer Phone',
-                            controller: _customerPhoneController,
-                            keyboardType: TextInputType.phone,
-                            prefixIcon: const Icon(Icons.phone),
-                            maxLength: 10,
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextField(
-                            label: 'Customer Address',
-                            controller: _customerAddressController,
-                            maxLines: 3,
-                            prefixIcon: const Icon(Icons.location_on),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Payment Details
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Payment Details',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 16),
-                          DropdownButtonFormField<PaymentType>(
-                            value: _paymentType,
-                            decoration: const InputDecoration(
-                              labelText: 'Payment Type',
-                              prefixIcon: Icon(Icons.payment),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                            items: PaymentType.values.map((type) {
-                              return DropdownMenuItem(
-                                value: type,
-                                child: Text(type.displayName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => _paymentType = value);
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          DropdownButtonFormField<PaymentStatus>(
-                            value: _paymentStatus,
-                            decoration: const InputDecoration(
-                              labelText: 'Payment Status',
-                              prefixIcon: Icon(Icons.credit_card),
-                            ),
-                            items: PaymentStatus.values.map((status) {
-                              return DropdownMenuItem(
-                                value: status,
-                                child: Text(status.displayName),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => _paymentStatus = value);
-                              }
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    // Customer Details
+                    Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Customer Details (Optional)',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                            ),
+                            const SizedBox(height: 16),
+                            CustomTextField(
+                              label: 'Customer Name',
+                              controller: _customerNameController,
+                              prefixIcon: const Icon(Icons.person),
+                            ),
+                            const SizedBox(height: 16),
+                            CustomTextField(
+                              label: 'Customer Phone',
+                              controller: _customerPhoneController,
+                              keyboardType: TextInputType.phone,
+                              prefixIcon: const Icon(Icons.phone),
+                              maxLength: 10,
+                            ),
+                            const SizedBox(height: 16),
+                            CustomTextField(
+                              label: 'Customer Address',
+                              controller: _customerAddressController,
+                              maxLines: 3,
+                              prefixIcon: const Icon(Icons.location_on),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Payment Details
+                    Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Payment Details',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                            ),
+                            const SizedBox(height: 16),
+                            DropdownButtonFormField<PaymentType>(
+                              value: _paymentType,
+                              dropdownColor: const Color(0xFF1C1C1C),
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                labelText: 'Payment Type',
+                                labelStyle: TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.payment,
+                                    color: Colors.white70),
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.05),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFCC0000),
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
+                              items: PaymentType.values.map((type) {
+                                return DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type.displayName),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() => _paymentType = value);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            DropdownButtonFormField<PaymentStatus>(
+                              value: _paymentStatus,
+                              dropdownColor: const Color(0xFF1C1C1C),
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                labelText: 'Payment Status',
+                                labelStyle: TextStyle(color: Colors.white70),
+                                prefixIcon: const Icon(Icons.credit_card,
+                                    color: Colors.white70),
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.05),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFFCC0000),
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
+                              items: PaymentStatus.values.map((status) {
+                                return DropdownMenuItem(
+                                  value: status,
+                                  child: Text(status.displayName),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() => _paymentStatus = value);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Bottom Action Bar
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
                   ),
-                ],
+                ),
+                child: Consumer<SaleProvider>(
+                  builder: (context, provider, child) {
+                    return CustomButton(
+                      text: 'Complete Sale',
+                      onPressed: _completeSale,
+                      isLoading: provider.isLoading,
+                      icon: Icons.check_circle,
+                    );
+                  },
+                ),
               ),
-            ),
-            // Bottom Action Bar
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, -3),
-                  ),
-                ],
-              ),
-              child: Consumer<SaleProvider>(
-                builder: (context, provider, child) {
-                  return CustomButton(
-                    text: 'Complete Sale',
-                    onPressed: _completeSale,
-                    isLoading: provider.isLoading,
-                    icon: Icons.check_circle,
-                  );
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -433,149 +576,259 @@ class _AddSaleItemSheetState extends State<_AddSaleItemSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-        left: 16,
-        right: 16,
-        top: 16,
-      ),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Add Sale Item',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<ProductType>(
-              value: _productType,
-              decoration: const InputDecoration(
-                labelText: 'Product Type',
-                prefixIcon: Icon(Icons.category),
-              ),
-              items: ProductType.values.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(type.displayName),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _productType = value;
-                    _selectedProductId = null;
-                    _dealerPrice = null;
-                    _customerPrice = null;
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-            if (_productType == ProductType.BATTERY)
-              Consumer<BatteryProvider>(
-                builder: (context, provider, child) {
-                  return DropdownButtonFormField<int>(
-                    value: _selectedProductId,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Battery',
-                      prefixIcon: Icon(Icons.battery_charging_full),
-                    ),
-                    validator: (value) =>
-                        value == null ? 'Please select a battery' : null,
-                    items: provider.batteries.map((battery) {
-                      return DropdownMenuItem(
-                        value: battery.id,
-                        child: Text(
-                          '${battery.name} (Stock: ${battery.quantity})',
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        final battery = provider.batteries.firstWhere(
-                          (b) => b.id == value,
-                        );
-                        setState(() {
-                          _selectedProductId = value;
-                          _dealerPrice = battery.dealerPrice;
-                          _customerPrice = battery.customerPrice;
-                        });
-                      }
-                    },
-                  );
-                },
-              )
-            else
-              Consumer<SparePartProvider>(
-                builder: (context, provider, child) {
-                  return DropdownButtonFormField<int>(
-                    value: _selectedProductId,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Spare Part',
-                      prefixIcon: Icon(Icons.build),
-                    ),
-                    validator: (value) =>
-                        value == null ? 'Please select a spare part' : null,
-                    items: provider.spareParts.map((sparePart) {
-                      return DropdownMenuItem(
-                        value: sparePart.id,
-                        child: Text(
-                          '${sparePart.name} (Stock: ${sparePart.quantity})',
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        final sparePart = provider.spareParts.firstWhere(
-                          (s) => s.id == value,
-                        );
-                        setState(() {
-                          _selectedProductId = value;
-                          _dealerPrice = sparePart.dealerPrice;
-                          _customerPrice = sparePart.customerPrice;
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Quantity',
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              validator: Validators.validateQuantity,
-              prefixIcon: const Icon(Icons.numbers),
-            ),
-            if (_dealerPrice != null && _customerPrice != null) ...[
-              const SizedBox(height: 16),
-              Text('Dealer Price: ₹${_dealerPrice!.toStringAsFixed(2)}'),
-              Text('Customer Price: ₹${_customerPrice!.toStringAsFixed(2)}'),
-            ],
-            const SizedBox(height: 24),
-            CustomButton(
-              text: 'Add Item',
-              onPressed: () {
-                if (_formKey.currentState?.validate() ?? false) {
-                  final item = SaleItemModel(
-                    productType: _productType,
-                    productId: _selectedProductId!,
-                    quantity: int.parse(_quantityController.text),
-                    dealerPrice: _dealerPrice!,
-                    customerPrice: _customerPrice!,
-                  );
-                  widget.onItemAdded(item);
-                  Navigator.pop(context);
-                }
-              },
-              icon: Icons.add,
-            ),
-            const SizedBox(height: 16),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF0A0A0A),
+            Color(0xFF1C1C1C),
+            Color(0xFF330000),
+            Color(0xFF5C0000),
           ],
+        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 16,
+          right: 16,
+          top: 16,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Add Sale Item',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<ProductType>(
+                value: _productType,
+                dropdownColor: const Color(0xFF1C1C1C),
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  labelText: 'Product Type',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  prefixIcon: const Icon(Icons.category, color: Colors.white70),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.05),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFCC0000),
+                      width: 2,
+                    ),
+                  ),
+                ),
+                items: ProductType.values.map((type) {
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(type.displayName),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      _productType = value;
+                      _selectedProductId = null;
+                      _dealerPrice = null;
+                      _customerPrice = null;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              if (_productType == ProductType.BATTERY)
+                Consumer<BatteryProvider>(
+                  builder: (context, provider, child) {
+                    return DropdownButtonFormField<int>(
+                      value: _selectedProductId,
+                      dropdownColor: const Color(0xFF1C1C1C),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Select Battery',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        prefixIcon: const Icon(Icons.battery_charging_full,
+                            color: Colors.white70),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.05),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFCC0000),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.red.withOpacity(0.7),
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                      validator: (value) =>
+                          value == null ? 'Please select a battery' : null,
+                      items: provider.batteries.map((battery) {
+                        return DropdownMenuItem(
+                          value: battery.id,
+                          child: Text(
+                            '${battery.name} (Stock: ${battery.quantity})',
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          final battery = provider.batteries.firstWhere(
+                            (b) => b.id == value,
+                          );
+                          setState(() {
+                            _selectedProductId = value;
+                            _dealerPrice = battery.dealerPrice;
+                            _customerPrice = battery.customerPrice;
+                          });
+                        }
+                      },
+                    );
+                  },
+                )
+              else
+                Consumer<SparePartProvider>(
+                  builder: (context, provider, child) {
+                    return DropdownButtonFormField<int>(
+                      value: _selectedProductId,
+                      dropdownColor: const Color(0xFF1C1C1C),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Select Spare Part',
+                        labelStyle: TextStyle(color: Colors.white70),
+                        prefixIcon:
+                            const Icon(Icons.build, color: Colors.white70),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.05),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFCC0000),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.red.withOpacity(0.7),
+                            width: 1,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                      validator: (value) =>
+                          value == null ? 'Please select a spare part' : null,
+                      items: provider.spareParts.map((sparePart) {
+                        return DropdownMenuItem(
+                          value: sparePart.id,
+                          child: Text(
+                            '${sparePart.name} (Stock: ${sparePart.quantity})',
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          final sparePart = provider.spareParts.firstWhere(
+                            (s) => s.id == value,
+                          );
+                          setState(() {
+                            _selectedProductId = value;
+                            _dealerPrice = sparePart.dealerPrice;
+                            _customerPrice = sparePart.customerPrice;
+                          });
+                        }
+                      },
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Quantity',
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                validator: Validators.validateQuantity,
+                prefixIcon: const Icon(Icons.numbers),
+              ),
+              if (_dealerPrice != null && _customerPrice != null) ...[
+                const SizedBox(height: 16),
+                Text(
+                  'Dealer Price: ₹${_dealerPrice!.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                Text(
+                  'Customer Price: ₹${_customerPrice!.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              ],
+              const SizedBox(height: 24),
+              CustomButton(
+                text: 'Add Item',
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    final item = SaleItemModel(
+                      productType: _productType,
+                      productId: _selectedProductId!,
+                      quantity: int.parse(_quantityController.text),
+                      dealerPrice: _dealerPrice!,
+                      customerPrice: _customerPrice!,
+                    );
+                    widget.onItemAdded(item);
+                    Navigator.pop(context);
+                  }
+                },
+                icon: Icons.add,
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

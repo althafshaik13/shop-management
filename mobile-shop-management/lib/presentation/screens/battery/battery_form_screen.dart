@@ -167,146 +167,184 @@ class _BatteryFormScreenState extends State<BatteryFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit Battery' : 'Add Battery')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Image Section
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                      image: _imageUrl != null
-                          ? DecorationImage(
-                              image: NetworkImage(_imageUrl!),
-                              fit: BoxFit.cover,
-                            )
+      appBar: AppBar(
+        title: Text(isEditing ? 'Edit Battery' : 'Add Battery'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF0A0A0A),
+                Color(0xFF1C1C1C),
+                Color(0xFF330000),
+                Color(0xFF5C0000),
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A0A0A),
+              Color(0xFF1C1C1C),
+              Color(0xFF330000),
+              Color(0xFF5C0000),
+            ],
+          ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Image Section
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        image: _imageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(_imageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                      child: _imageUrl == null
+                          ? const Icon(Icons.battery_charging_full,
+                              size: 64, color: Colors.white70)
                           : null,
                     ),
-                    child: _imageUrl == null
-                        ? const Icon(Icons.battery_charging_full, size: 64)
-                        : null,
-                  ),
-                  const SizedBox(height: 8),
-                  Consumer<BatteryProvider>(
-                    builder: (context, provider, child) {
-                      return TextButton.icon(
-                        onPressed: provider.isUploading ? null : _pickImage,
-                        icon: provider.isUploading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.camera_alt),
-                        label: Text(
-                          provider.isUploading
-                              ? 'Uploading...'
-                              : 'Change Image',
-                        ),
-                      );
-                    },
-                  ),
+                    const SizedBox(height: 8),
+                    Consumer<BatteryProvider>(
+                      builder: (context, provider, child) {
+                        return TextButton.icon(
+                          onPressed: provider.isUploading ? null : _pickImage,
+                          icon: provider.isUploading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.camera_alt),
+                          label: Text(
+                            provider.isUploading
+                                ? 'Uploading...'
+                                : _imageUrl == null
+                                    ? 'Add Image'
+                                    : 'Change Image',
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              CustomTextField(
+                label: 'Name',
+                controller: _nameController,
+                validator: (value) =>
+                    Validators.validateRequired(value, 'Name'),
+                prefixIcon: const Icon(Icons.title),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Model Number',
+                controller: _modelController,
+                validator: (value) =>
+                    Validators.validateRequired(value, 'Model Number'),
+                prefixIcon: const Icon(Icons.numbers),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Capacity (e.g., 150Ah)',
+                controller: _capacityController,
+                validator: (value) =>
+                    Validators.validateRequired(value, 'Capacity'),
+                prefixIcon: const Icon(Icons.power),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Voltage (e.g., 12V)',
+                controller: _voltageController,
+                validator: (value) =>
+                    Validators.validateRequired(value, 'Voltage'),
+                prefixIcon: const Icon(Icons.electric_bolt),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Warranty Period (months)',
+                controller: _warrantyController,
+                keyboardType: TextInputType.number,
+                validator: (value) =>
+                    Validators.validatePositiveNumber(value, 'Warranty Period'),
+                prefixIcon: const Icon(Icons.verified),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Dealer Price',
+                controller: _dealerPriceController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: Validators.validatePrice,
+                prefixIcon: const Icon(Icons.shopping_cart),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                 ],
               ),
-            ),
-            const SizedBox(height: 24),
-            CustomTextField(
-              label: 'Name',
-              controller: _nameController,
-              validator: (value) => Validators.validateRequired(value, 'Name'),
-              prefixIcon: const Icon(Icons.title),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Model Number',
-              controller: _modelController,
-              validator: (value) =>
-                  Validators.validateRequired(value, 'Model Number'),
-              prefixIcon: const Icon(Icons.numbers),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Capacity (e.g., 150Ah)',
-              controller: _capacityController,
-              validator: (value) =>
-                  Validators.validateRequired(value, 'Capacity'),
-              prefixIcon: const Icon(Icons.power),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Voltage (e.g., 12V)',
-              controller: _voltageController,
-              validator: (value) =>
-                  Validators.validateRequired(value, 'Voltage'),
-              prefixIcon: const Icon(Icons.electric_bolt),
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Warranty Period (months)',
-              controller: _warrantyController,
-              keyboardType: TextInputType.number,
-              validator: (value) =>
-                  Validators.validatePositiveNumber(value, 'Warranty Period'),
-              prefixIcon: const Icon(Icons.verified),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Dealer Price',
-              controller: _dealerPriceController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Customer Price',
+                controller: _customerPriceController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: Validators.validatePrice,
+                prefixIcon: const Icon(Icons.sell),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                ],
               ),
-              validator: Validators.validatePrice,
-              prefixIcon: const Icon(Icons.shopping_cart),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Customer Price',
-              controller: _customerPriceController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+              const SizedBox(height: 16),
+              CustomTextField(
+                label: 'Quantity',
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                validator: Validators.validateQuantity,
+                prefixIcon: const Icon(Icons.inventory),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
-              validator: Validators.validatePrice,
-              prefixIcon: const Icon(Icons.sell),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Quantity',
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              validator: Validators.validateQuantity,
-              prefixIcon: const Icon(Icons.inventory),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            ),
-            const SizedBox(height: 32),
-            Consumer<BatteryProvider>(
-              builder: (context, provider, child) {
-                return CustomButton(
-                  text: isEditing ? 'Update Battery' : 'Add Battery',
-                  onPressed: _saveBattery,
-                  isLoading: provider.isLoading,
-                  icon: isEditing ? Icons.save : Icons.add,
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 32),
+              Consumer<BatteryProvider>(
+                builder: (context, provider, child) {
+                  return CustomButton(
+                    text: isEditing ? 'Update Battery' : 'Add Battery',
+                    onPressed: _saveBattery,
+                    isLoading: provider.isLoading,
+                    icon: isEditing ? Icons.save : Icons.add,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

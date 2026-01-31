@@ -43,10 +43,17 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: textColor,
+        backgroundColor: backgroundColor ?? Colors.white.withOpacity(0.1),
+        foregroundColor: textColor ?? Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(
+            color: Colors.white.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        elevation: 0,
       ),
       child: isLoading
           ? const SizedBox(
@@ -58,11 +65,11 @@ class CustomButton extends StatelessWidget {
               ),
             )
           : icon != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [Icon(icon), const SizedBox(width: 8), Text(text)],
-            )
-          : Text(text),
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [Icon(icon), const SizedBox(width: 8), Text(text)],
+                )
+              : Text(text),
     );
   }
 }

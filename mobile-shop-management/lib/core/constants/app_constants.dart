@@ -13,7 +13,7 @@ class AppConstants {
   static const List<String> allowedImageTypes = ['jpg', 'jpeg', 'png'];
 
   // App Info
-  static const String appName = 'Shop Management';
+  static const String appName = 'SMS Battery Works';
   static const String appVersion = '1.0.0';
 
   // Validation

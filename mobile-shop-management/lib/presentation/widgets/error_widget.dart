@@ -5,7 +5,7 @@ class ErrorDisplayWidget extends StatelessWidget {
   final VoidCallback? onRetry;
 
   const ErrorDisplayWidget({Key? key, required this.message, this.onRetry})
-    : super(key: key);
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,19 @@ class ErrorDisplayWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(height: 16),
-            Text('Error', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'Error',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
             const SizedBox(height: 8),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                  ),
             ),
             if (onRetry != null) ...[
               const SizedBox(height: 24),
@@ -34,6 +41,15 @@ class ErrorDisplayWidget extends StatelessWidget {
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
                 label: const Text('Retry'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.1),
+                  foregroundColor: Colors.white,
+                  side: BorderSide(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1,
+                  ),
+                  elevation: 0,
+                ),
               ),
             ],
           ],

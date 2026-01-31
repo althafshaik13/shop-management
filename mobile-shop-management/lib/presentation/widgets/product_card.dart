@@ -33,6 +33,15 @@ class ProductCard extends StatelessWidget {
     final currencyFormat = NumberFormat.currency(symbol: '₹');
 
     return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Colors.white.withOpacity(0.3),
+          width: 1.5,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -53,24 +62,25 @@ class ProductCard extends StatelessWidget {
                         placeholder: (context, url) => Container(
                           width: 80,
                           height: 80,
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.image, color: Colors.grey),
+                          color: Colors.white.withOpacity(0.1),
+                          child: const Icon(Icons.image, color: Colors.white70),
                         ),
                         errorWidget: (context, url, error) => Container(
                           width: 80,
                           height: 80,
-                          color: Colors.grey[200],
+                          color: Colors.white.withOpacity(0.1),
                           child: const Icon(
                             Icons.broken_image,
-                            color: Colors.grey,
+                            color: Colors.white70,
                           ),
                         ),
                       )
                     : Container(
                         width: 80,
                         height: 80,
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.inventory, color: Colors.grey),
+                        color: Colors.white.withOpacity(0.1),
+                        child:
+                            const Icon(Icons.inventory, color: Colors.white70),
                       ),
               ),
               const SizedBox(width: 12),
@@ -82,8 +92,9 @@ class ProductCard extends StatelessWidget {
                     Text(
                       name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -92,37 +103,41 @@ class ProductCard extends StatelessWidget {
                       Text(
                         subtitle!,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
-                        ),
+                              color: Colors.white70,
+                            ),
                       ),
                     ],
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.shopping_cart,
                           size: 16,
-                          color: Colors.grey[600],
+                          color: Colors.white70,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           'Dealer: ${currencyFormat.format(dealerPrice)}',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.white,
+                                  ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.sell, size: 16, color: Colors.green[600]),
+                        const Icon(Icons.sell,
+                            size: 16, color: Colors.greenAccent),
                         const SizedBox(width: 4),
                         Text(
                           'Customer: ${currencyFormat.format(customerPrice)}',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: Colors.green[600],
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.greenAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -133,8 +148,16 @@ class ProductCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: quantity > 0 ? Colors.green[50] : Colors.red[50],
+                        color: quantity > 0
+                            ? Colors.green.withOpacity(0.2)
+                            : Colors.red.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: quantity > 0
+                              ? Colors.greenAccent.withOpacity(0.5)
+                              : Colors.redAccent.withOpacity(0.5),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         'Stock: $quantity',
@@ -142,8 +165,8 @@ class ProductCard extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: quantity > 0
-                              ? Colors.green[700]
-                              : Colors.red[700],
+                              ? Colors.greenAccent
+                              : Colors.redAccent,
                         ),
                       ),
                     ),
@@ -158,13 +181,13 @@ class ProductCard extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.edit, size: 20),
                         onPressed: onEdit,
-                        color: Colors.blue,
+                        color: Colors.blueAccent,
                       ),
                     if (onDelete != null)
                       IconButton(
                         icon: const Icon(Icons.delete, size: 20),
                         onPressed: onDelete,
-                        color: Colors.red,
+                        color: Colors.redAccent,
                       ),
                   ],
                 ),
